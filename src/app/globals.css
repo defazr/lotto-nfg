@@ -1,26 +1,1007 @@
-@import "tailwindcss";
+/* ===========================================
+   LOTTO NFG — Design System (Deep Green)
+   =========================================== */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors - Deep Green Theme */
+  --bg: #0b0f0e;
+  --surface: #0f1513;
+  --card: #121a17;
+  --card-hover: #162320;
+  --text: #e9f2ee;
+  --muted: rgba(233, 242, 238, 0.65);
+  --line: rgba(233, 242, 238, 0.12);
+  --accent: #2f7d63;
+  --accent-hover: #3a9a7a;
+  --accent-2: #74c69d;
+  --danger: #ff6b6b;
+  --warning: #ffd166;
+
+  /* Layout */
+  --maxw: 1100px;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Ball Colors (adjusted for dark bg) */
+  --ball-yellow: #fbbf24;
+  --ball-blue: #60a5fa;
+  --ball-red: #f87171;
+  --ball-gray: #9ca3af;
+  --ball-green: #4ade80;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ===========================================
+   Base Styles
+   =========================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===========================================
+   Typography
+   =========================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+h1 { font-size: 28px; }
+h2 { font-size: 20px; }
+h3 { font-size: 17px; }
+
+@media (min-width: 640px) {
+  h1 { font-size: 32px; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 18px; }
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent-2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+/* ===========================================
+   Layout
+   =========================================== */
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.pageContent {
+  padding: var(--space-lg) 0 var(--space-xl);
+}
+
+/* Grid Layouts */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .grid2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ===========================================
+   Card / Section
+   =========================================== */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(233, 242, 238, 0.2);
+}
+
+.cardClickable {
+  cursor: pointer;
+}
+
+.cardClickable:hover {
+  background: var(--card-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  color: var(--text);
+}
+
+.sectionSubtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: var(--space-xs);
+  line-height: 1.5;
+}
+
+.subtle {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ===========================================
+   Buttons
+   =========================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btnPrimary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btnPrimary:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.btnSecondary {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btnSecondary:hover {
+  background: var(--card-hover);
+  border-color: rgba(233, 242, 238, 0.25);
+  color: var(--text);
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--accent-2);
+  border: 1px solid var(--accent);
+}
+
+.btnGhost:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btnSmall {
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+/* ===========================================
+   Form Elements
+   =========================================== */
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(47, 125, 99, 0.25);
+}
+
+/* ===========================================
+   Badges
+   =========================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badgeAccent {
+  background: var(--accent);
+  color: #fff;
+}
+
+.badgeMuted {
+  background: rgba(233, 242, 238, 0.1);
+  color: var(--muted);
+}
+
+.badgeWarning {
+  background: rgba(255, 209, 102, 0.2);
+  color: var(--warning);
+}
+
+.badgeDanger {
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--danger);
+}
+
+/* ===========================================
+   Table
+   =========================================== */
+
+.tableWrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.table tbody tr:hover {
+  background: var(--card-hover);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===========================================
+   Lotto Balls
+   =========================================== */
+
+.ballRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.ball {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+
+.ball:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+  color: #fff;
+}
+
+.ballSmall {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.ballLarge {
+  width: 56px;
+  height: 56px;
+  font-size: 22px;
+}
+
+/* Ball Colors */
+.ballYellow { background: var(--ball-yellow); }
+.ballBlue { background: var(--ball-blue); }
+.ballRed { background: var(--ball-red); }
+.ballGray { background: var(--ball-gray); }
+.ballGreen { background: var(--ball-green); }
+
+/* Bonus Ball */
+.ballBonus {
+  border: 3px solid var(--card);
+  outline: 2px dashed var(--muted);
+  outline-offset: -1px;
+}
+
+.ballPlus {
+  font-size: 24px;
+  color: var(--muted);
+  margin: 0 4px;
+}
+
+/* ===========================================
+   Stat Cards (numbers display)
+   =========================================== */
+
+.statCard {
+  text-align: center;
+  padding: var(--space-lg);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.statValue {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent-2);
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: var(--space-xs);
+}
+
+/* ===========================================
+   Quick Links / Chips
+   =========================================== */
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.chip:hover {
+  background: var(--card-hover);
+  border-color: var(--accent);
+  color: var(--accent-2);
+  text-decoration: none;
+}
+
+.chipActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ===========================================
+   Header
+   =========================================== */
+
+.siteHeader {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  gap: var(--space-md);
+}
+
+.siteLogo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.siteLogo:hover {
+  text-decoration: none;
+}
+
+.logoText {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-2);
+  letter-spacing: -0.5px;
+}
+
+.logoSub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: -2px;
+}
+
+.headerNav {
+  display: flex;
+  gap: 4px;
+}
+
+.navLink {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.navLink:hover {
+  color: var(--text);
+  background: var(--card);
+  text-decoration: none;
+}
+
+.navLinkActive {
+  color: var(--accent-2);
+  background: rgba(47, 125, 99, 0.15);
+}
+
+@media (max-width: 640px) {
+  .headerNav {
+    gap: 2px;
+  }
+  .navLink {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .logoSub {
+    display: none;
+  }
+}
+
+/* ===========================================
+   Footer
+   =========================================== */
+
+.siteFooter {
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: var(--space-lg) 0;
+  margin-top: var(--space-xl);
+}
+
+.footerInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footerText {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footerLinks {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 12px;
+}
+
+.footerLinks a {
+  color: var(--muted);
+}
+
+.footerLinks a:hover {
+  color: var(--accent-2);
+}
+
+/* ===========================================
+   Page Specific Helpers
+   =========================================== */
+
+.pageHeader {
+  margin-bottom: var(--space-lg);
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.pageDesc {
+  font-size: 15px;
+  color: var(--muted);
+  margin-top: var(--space-sm);
+  line-height: 1.6;
+}
+
+/* Section spacing */
+.section {
+  margin-bottom: var(--space-lg);
+}
+
+/* Flex utilities */
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Scroll anchor offset for sticky header */
+[id] {
+  scroll-margin-top: 80px;
+}
+
+/* ===========================================
+   Responsive
+   =========================================== */
+
+@media (max-width: 640px) {
+  .pageTitle {
+    font-size: 24px;
+  }
+  .card {
+    padding: var(--space-md);
+  }
+  .ball {
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
+  }
+  .ballLarge {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+  .statValue {
+    font-size: 26px;
+  }
+}
+
+/* Extra small screens (360px~) */
+@media (max-width: 400px) {
+  .ballLarge {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  .ballPlus {
+    font-size: 18px;
+    margin: 0 2px;
+  }
+}
+
+/* ===========================================
+   FAQ Component
+   =========================================== */
+
+.faqItem {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.faqQuestion {
+  padding: var(--space-md);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  transition: background 0.2s;
+}
+
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+
+.faqQuestion::after {
+  content: "+";
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+details[open] .faqQuestion::after {
+  content: "-";
+}
+
+.faqQuestion:hover {
+  background: var(--card-hover);
+}
+
+.faqAnswer {
+  padding: 0 var(--space-md) var(--space-md);
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ===========================================
+   Hot/Cold Indicators
+   =========================================== */
+
+.indicatorHot {
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.indicatorCold {
+  color: var(--ball-blue);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.indicatorNeutral {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ===========================================
+   Zone Distribution Bar
+   =========================================== */
+
+.zoneBar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.zoneSegment {
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.zoneSegment1 { background: var(--ball-yellow); }
+.zoneSegment2 { background: var(--ball-blue); }
+.zoneSegment3 { background: var(--ball-red); }
+.zoneSegment4 { background: var(--ball-gray); }
+.zoneSegment5 { background: var(--ball-green); }
+
+/* ===========================================
+   Recommended Section
+   =========================================== */
+
+.recommendCard {
+  background: linear-gradient(135deg, var(--card) 0%, var(--surface) 100%);
+  border: 1px solid var(--accent);
+}
+
+.recommendTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-2);
+  margin-bottom: var(--space-sm);
+}
+
+/* ===========================================
+   Guide Quick Links
+   =========================================== */
+
+.guideQuickLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: var(--space-sm) 0;
+}
+
+.guideLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.guideLink:hover {
+  background: var(--card-hover);
+  border-color: var(--accent);
+  color: var(--accent-2);
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .guideLink {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-width: calc(50% - 4px);
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}
+
+/* ===========================================
+   Header Search
+   =========================================== */
+
+.headerSearch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.headerSearchInput {
+  width: 80px;
+  padding: 6px 10px;
+  font-size: 13px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.headerSearchInput:focus {
+  border-color: var(--accent);
+}
+
+.headerSearchInput::placeholder {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.headerSearchBtn {
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.headerSearchBtn:hover {
+  background: var(--accent-hover);
+}
+
+.headerSearchError {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--danger);
+  background: var(--card);
+  border: 1px solid var(--danger);
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+@media (max-width: 767px) {
+  .headerSearchInput {
+    width: 72px;
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+  .headerSearchInput::placeholder {
+    font-size: 13px;
+  }
+  .headerSearchBtn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* ===========================================
+   Mobile Navigation
+   =========================================== */
+
+/* 데스크탑: 가로 메뉴 보임, 모바일 토글 숨김 */
+.headerNavDesktop {
+  display: flex;
+}
+
+.mobileNavWrap {
+  display: none;
+  position: relative;
+}
+
+/* 모바일(md 미만): 가로 메뉴 숨김, 토글 보임 */
+@media (max-width: 767px) {
+  .headerNavDesktop {
+    display: none;
+  }
+  .mobileNavWrap {
+    display: block;
+  }
+}
+
+/* 토글 버튼 */
+.mobileNavToggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobileNavToggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.mobileNavIcon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.mobileNavText {
+  font-size: 13px;
+}
+
+/* 오버레이 (바깥 클릭 감지) */
+.mobileNavOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+/* 드롭다운 패널 */
+.mobileNavDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 140px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* 드롭다운 항목 */
+.mobileNavItem {
+  display: block;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: all 0.15s;
+}
+
+.mobileNavItem:last-child {
+  border-bottom: none;
+}
+
+.mobileNavItem:hover {
+  background: var(--card-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* active 상태 */
+.mobileNavItemActive {
+  color: var(--accent-2);
+  background: rgba(47, 125, 99, 0.15);
+}
+
+.mobileNavItemActive:hover {
+  color: var(--accent-2);
 }

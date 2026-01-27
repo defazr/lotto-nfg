@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild:static": "node scripts/build_number_index.mjs",
+    "build:static": "npm run prebuild:static && next build && node scripts/postexport_make_indexes.mjs",
     "start": "next start",
     "lint": "eslint"
   },

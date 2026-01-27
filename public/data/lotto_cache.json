@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "total_draws": 1205,
+    "latest_draw": 1205,
+    "generated_at": "2026-01-04 04:48:15",
+    "version": "4.0"
+  },
+  "latest_draw": {
+    "draw_no": 1205,
+    "date": "2026-01-03",
+    "numbers": [
+      1,
+      4,
+      16,
+      23,
+      31,
+      41
+    ],
+    "bonus": 2,
+    "total_sales": 0,
+    "first_prize_amount": 0,
+    "first_winners": 0
+  },
+  "statistics": {
+    "number_frequency": {},
+    "most_frequent_numbers": [],
+    "least_frequent_numbers": []
+  },
+  "_meta": {
+    "sources": [
+      "lotto_co_kr",
+      "lottorich"
+    ],
+    "updated_at": "2026-01-04 04:48:15"
+  }
+}
