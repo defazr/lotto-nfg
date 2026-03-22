@@ -123,6 +123,9 @@ export default function NumbersPage() {
           </section>
         </div>
 
+        {/* Ad Banner - Mid */}
+        <AdBanner slot="4183035275" format="auto" />
+
         {/* By Zone */}
         {zones.map((zone) => {
           const zoneStats = statsWithGap.filter(s => s.num >= zone.start && s.num <= zone.end);

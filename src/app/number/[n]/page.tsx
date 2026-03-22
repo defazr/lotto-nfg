@@ -202,6 +202,9 @@ export default async function NumberPage({ params }: Props) {
           </div>
         </div>
 
+        {/* Ad Banner - Upper Mid */}
+        <AdBanner slot="4183035275" format="auto" />
+
         {/* Combo Sets with Copy */}
         <NumberComboSets
           baseNum={num}
@@ -310,6 +313,9 @@ export default async function NumberPage({ params }: Props) {
             </table>
           </div>
         </section>
+
+        {/* Ad Banner - Lower Mid */}
+        <AdBanner slot="2668974755" format="auto" />
 
         {/* Top 10 */}
         <section className="card">

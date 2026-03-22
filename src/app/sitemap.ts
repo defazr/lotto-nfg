@@ -27,6 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/stats/`, lastModified: new Date(), priority: 0.6 },
     { url: `${base}/draws/`, lastModified: new Date(), priority: 0.6 },
     { url: `${base}/numbers/`, lastModified: new Date(), priority: 0.6 },
+    { url: `${base}/calculator/`, lastModified: new Date(), priority: 0.6 },
+    { url: `${base}/check/`, lastModified: new Date(), priority: 0.6 },
     ...drawUrls,
     ...numberUrls,
   ];

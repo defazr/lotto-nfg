@@ -4,6 +4,8 @@ import { getBreadcrumbJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import AdBanner from "@/components/AdBanner";
 import DrawActions from "@/components/DrawActions";
+import StoreLinks from "@/components/StoreLinks";
+import storeDataAll from "../../../../public/data/store_data.json";
 
 type Props = {
   params: Promise<{ round: string }>;
@@ -182,7 +184,7 @@ export default async function DrawPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div style={{ display: "grid", gap: "var(--space-lg)" }}>
+      <div style={{ display: "grid", gap: "var(--space-lg)", gridTemplateColumns: "minmax(0, 1fr)" }}>
         {/* Header */}
         <section className="card">
           <div className="flexBetween" style={{ flexWrap: "wrap" }}>
@@ -255,6 +257,9 @@ export default async function DrawPage({ params }: Props) {
           </div>
         </section>
 
+        {/* Ad Banner - Upper Mid */}
+        <AdBanner slot="4183035275" format="auto" />
+
         {/* Zone Distribution with Bar */}
         <section id="zones" className="card">
           <h2 className="sectionTitle">번호 구간 분포</h2>
@@ -272,9 +277,9 @@ export default async function DrawPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="grid3" style={{ gridTemplateColumns: "repeat(5, 1fr)" }}>
+          <div className="zoneGrid">
             {["1~10", "11~20", "21~30", "31~40", "41~45"].map((label, i) => (
-              <div key={label} className="statCard" style={{
+              <div key={label} className="statCard zoneStatCard" style={{
                 background: zones[i] > 0 ? "var(--accent)" : "var(--surface)",
                 borderColor: zones[i] > 0 ? "var(--accent)" : undefined,
               }}>
@@ -368,6 +373,9 @@ export default async function DrawPage({ params }: Props) {
           </section>
         )}
 
+        {/* Ad Banner - Lower Mid */}
+        <AdBanner slot="2668974755" format="auto" />
+
         {/* Related Rounds (prev/next 5) */}
         <section className="card">
           <h2 className="sectionTitle">주변 회차</h2>
@@ -441,6 +449,12 @@ export default async function DrawPage({ params }: Props) {
         <p className="subtle" style={{ textAlign: "center", padding: "var(--space-md)", lineHeight: 1.7 }}>
           ※ 본 분석은 과거 데이터 기반 통계 요약이며, 각 회차 추첨은 <strong>독립적·무작위</strong>로 진행됩니다.
         </p>
+
+        {/* 당첨 판매점 */}
+        <StoreLinks
+          drawNo={round}
+          stores={((storeDataAll as Record<string, unknown>)[String(round)] as { draw_no: number; rank1: { name: string; address: string; rank: number; method?: string }[]; rank2: { name: string; address: string; rank: number; method?: string }[] }) || null}
+        />
 
         {/* SEO 요약 텍스트 */}
         <section className="card" style={{ background: "var(--surface)" }}>

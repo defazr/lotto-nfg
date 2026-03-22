@@ -4,11 +4,14 @@ import type { Metadata } from "next";
 import cacheData from "../../public/data/lotto_cache.json";
 import historyData from "../../public/data/lotto_history.json";
 import numberIndexData from "../../public/data/number_index.json";
+import storeDataAll from "../../public/data/store_data.json";
 import LatestDrawLive from "../components/LatestDrawLive";
 import SearchBox from "../components/SearchBox";
 import AdBanner from "../components/AdBanner";
 import RecommendedNumbers from "../components/RecommendedNumbers";
+import RecommendationResultCompare from "../components/RecommendationResultCompare";
 import GuideLinks from "../components/GuideLinks";
+import StoreLinks from "../components/StoreLinks";
 
 export const metadata: Metadata = {
   alternates: {
@@ -117,6 +120,7 @@ export default function HomePage() {
   const numberIndex = numberIndexData as { meta: { latest_draw: number }; numbers: Record<string, { count: number; last_seen: number }> };
 
   const latestRound = latest.draw_no;
+  const storeRecord = (storeDataAll as Record<string, unknown>)[String(latestRound)] as { draw_no: number; rank1: { name: string; address: string; rank: number; method?: string }[]; rank2: { name: string; address: string; rank: number; method?: string }[] } | undefined;
 
   // Get top 6 most frequent numbers
   const allStats = Object.entries(numberIndex.numbers)
@@ -183,6 +187,15 @@ export default function HomePage() {
         {/* Section: Recommended 3 Sets */}
         <RecommendedNumbers numberStats={allStats} latestDraw={latestRound} />
 
+        {/* Section: Recommendation Result Compare */}
+        <RecommendationResultCompare currentDraw={latestRound} winNumbers={latest.numbers} bonus={latest.bonus} />
+
+        {/* Ad Banner - Mid */}
+        <AdBanner slot="4183035275" format="auto" />
+
+        {/* Section: Store Links */}
+        <StoreLinks drawNo={latestRound} stores={storeRecord || null} />
+
         {/* Section: Internal Links */}
         <section className="card">
           <h2 className="sectionTitle">더 알아보기</h2>
@@ -190,6 +203,7 @@ export default function HomePage() {
             <Link href="/draws/" className="chip">회차별 당첨번호 전체 보기</Link>
             <Link href="/numbers/" className="chip">번호별 출현 빈도 분석 보기</Link>
             <Link href="/stats/" className="chip">전체 통계(합계/홀짝/구간분포) 보기</Link>
+            <Link href="/calculator/" className="chip">실수령액 계산기</Link>
           </div>
         </section>
 
@@ -208,6 +222,7 @@ export default function HomePage() {
               { title: "보너스 번호 통계", href: "/stats/#bonus" },
               { title: "번호별 분석 (1~45)", href: "/numbers/" },
               { title: "전체 회차 목록", href: "/draws/" },
+              { title: "실수령액 계산기", href: "/calculator/" },
               { title: "최신 회차 분석", href: `/draw/${latestRound}/` },
               { title: "첫 회차 (1회)", href: "/draw/1/" },
             ].map((item) => (
@@ -312,6 +327,9 @@ export default function HomePage() {
             본 서비스는 <strong>참고용 정보 제공 목적</strong>이며, 당첨을 보장하지 않습니다.
           </div>
         </section>
+
+        {/* Ad Banner - Bottom */}
+        <AdBanner slot="2668974755" format="horizontal" />
 
         {/* 다음 행동 */}
         <div style={{ textAlign: "center", padding: "var(--space-md)" }}>

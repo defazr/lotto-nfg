@@ -121,6 +121,9 @@ export default function DrawsPage() {
           </div>
         </section>
 
+        {/* Ad Banner - Mid */}
+        <AdBanner slot="4183035275" format="auto" />
+
         {/* Last 30 */}
         <section id="last-30" className="card">
           <h2 className="sectionTitle">최근 30회 당첨번호</h2>

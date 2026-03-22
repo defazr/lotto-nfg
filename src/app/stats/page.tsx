@@ -136,6 +136,9 @@ export default function StatsPage() {
         </div>
       </section>
 
+      {/* Ad Banner - Upper Mid */}
+      <AdBanner slot="4183035275" format="auto" />
+
       {/* TOP 10 */}
       <section id="top" className="card" style={{ background: "rgba(47, 125, 99, 0.1)", borderColor: "var(--accent)" }}>
         <h2 className="sectionTitle" style={{ color: "var(--accent-2)" }}>가장 많이 나온 번호 TOP 10</h2>
@@ -157,6 +160,9 @@ export default function StatsPage() {
           ))}
         </div>
       </section>
+
+      {/* Ad Banner - Lower Mid */}
+      <AdBanner slot="2668974755" format="auto" />
 
       {/* BOTTOM 10 */}
       <section id="bottom" className="card" style={{ background: "rgba(255, 107, 107, 0.08)", borderColor: "var(--danger)" }}>

@@ -41,6 +41,9 @@ HEADERS_DESKTOP = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
+STORE_FILE = f"{DATA_DIR}/store_data.json"
+WEB_STORE_FILE = f"{WEB_DATA_DIR}/store_data.json"
+
 
 def retry_request(url, headers, max_retries=3):
     """재시도 로직 (1s, 2s, 4s backoff)"""
@@ -53,6 +56,78 @@ def retry_request(url, headers, max_retries=3):
             print(f"  [!] 요청 실패 ({i+1}/{max_retries}): {e}")
         time.sleep(2 ** i)
     return None
+
+
+def fetch_winning_stores(draw_no, rank=1):
+    """동행복권 API로 당첨 판매점 조회 (rank: 1=1등, 2=2등)"""
+    url = "https://www.dhlottery.co.kr/wnprchsplcsrch/selectLtWnShp.do"
+    params = {
+        "srchWnShpRnk": str(rank),
+        "srchLtEpsd": str(draw_no),
+        "srchShpLctn": "",
+        "srchLtGdsCd": "LO40",
+    }
+    headers = {
+        **HEADERS_DESKTOP,
+        "Referer": "https://www.dhlottery.co.kr/wnprchsplcsrch/home",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    try:
+        resp = requests.get(url, params=params, headers=headers, timeout=10)
+        if resp.status_code == 200:
+            data = resp.json()
+            items = data.get("data", {}).get("list", [])
+            stores = []
+            for item in items:
+                store = {
+                    "name": (item.get("shpNm") or "").strip(),
+                    "address": (item.get("shpAddr") or "").strip(),
+                    "rank": rank,
+                }
+                method = (item.get("atmtPsvYnTxt") or "").strip()
+                if method:
+                    store["method"] = method
+                if store["name"]:
+                    stores.append(store)
+            return stores
+    except Exception as e:
+        print(f"  [!] 판매점 조회 실패 (rank={rank}): {e}")
+    return []
+
+
+def update_store_data(draw_no):
+    """회차별 1등/2등 당첨 판매점 데이터 수집 및 저장"""
+    print(f"\n[판매점] {draw_no}회 당첨 판매점 조회...")
+
+    store_data = {}
+    if os.path.exists(STORE_FILE):
+        try:
+            with open(STORE_FILE, "r", encoding="utf-8") as f:
+                store_data = json.load(f)
+        except:
+            pass
+
+    rank1 = fetch_winning_stores(draw_no, rank=1)
+    rank2 = fetch_winning_stores(draw_no, rank=2)
+
+    if rank1 or rank2:
+        store_data[str(draw_no)] = {
+            "draw_no": draw_no,
+            "rank1": rank1,
+            "rank2": rank2,
+            "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        _atomic_write_json(STORE_FILE, store_data)
+        print(f"  [O] 1등 판매점 {len(rank1)}곳, 2등 판매점 {len(rank2)}곳")
+
+        # 웹 폴더로 복사
+        if os.path.exists(STORE_FILE):
+            shutil.copy2(STORE_FILE, WEB_STORE_FILE)
+            os.chmod(WEB_STORE_FILE, 0o644)
+            print(f"  [O] 웹 복사: {WEB_STORE_FILE}")
+    else:
+        print("  [X] 판매점 데이터 없음")
 
 
 def save_debug_html(source, html):
@@ -473,6 +548,9 @@ def update_cache(draw_no=None):
 
     # 웹 폴더로 복사
     copy_to_web()
+
+    # 당첨 판매점 수집
+    update_store_data(cache_data["draw_no"])
 
     print(f"\n{'='*50}")
     print(f"[O] 캐시 저장 완료: {CACHE_FILE}")

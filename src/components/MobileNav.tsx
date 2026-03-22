@@ -9,6 +9,8 @@ const navItems = [
   { href: "/draws/", label: "회차" },
   { href: "/numbers/", label: "번호" },
   { href: "/stats/", label: "통계" },
+  { href: "/calculator/", label: "계산기" },
+  { href: "/check/", label: "당첨체크" },
 ];
 
 export default function MobileNav() {

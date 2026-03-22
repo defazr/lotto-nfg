@@ -26,12 +26,13 @@ function generateSet(
   hot: number[],
   cold: number[],
   mid: number[],
-  seed: number
+  seed: number,
+  excludeKeys: Set<string> = new Set()
 ): number[] | null {
   // LCG-based seeded random with state
-  let state = seed;
+  let state = seed | 0;
   const nextRandom = () => {
-    state = (state * 1103515245 + 12345) & 0x7fffffff;
+    state = (Math.imul(state, 1103515245) + 12345) & 0x7fffffff;
     return state / 0x7fffffff;
   };
 
@@ -45,8 +46,8 @@ function generateSet(
     return result;
   };
 
-  for (let attempt = 0; attempt < 20; attempt++) {
-    state = seed + attempt * 100;
+  for (let attempt = 0; attempt < 50; attempt++) {
+    state = seed + attempt * 137;
     const pick: number[] = [];
 
     // Pick 2 from hot
@@ -64,19 +65,27 @@ function generateSet(
     // Check uniqueness
     if (new Set(pick).size !== 6) continue;
 
-    // Check odd/even ratio (3:3)
+    const sorted = [...pick].sort((a, b) => a - b);
+    const key = sorted.join(",");
+    if (excludeKeys.has(key)) continue;
+
     const oddCount = pick.filter((n) => n % 2 === 1).length;
-    if (oddCount !== 3) continue;
-
-    // Check sum range (110-160)
     const sum = pick.reduce((a, b) => a + b, 0);
-    if (sum < 110 || sum > 160) continue;
 
-    // Valid set found
-    return pick.sort((a, b) => a - b);
+    // Progressive relaxation: strict → relaxed → no constraint
+    if (attempt < 20) {
+      if (oddCount !== 3) continue;
+      if (sum < 110 || sum > 160) continue;
+    } else if (attempt < 35) {
+      if (oddCount < 2 || oddCount > 4) continue;
+      if (sum < 90 || sum > 180) continue;
+    }
+    // attempt >= 35: accept any valid unique set
+
+    return sorted;
   }
 
-  // Fallback: return shuffled pick without strict validation
+  // Fallback
   state = seed;
   const fallback: number[] = [];
   const hotShuffled = shuffle(hot);
@@ -104,9 +113,13 @@ export default function RecommendedNumbers({ numberStats, latestDraw }: Props) {
     const baseSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
 
     const result: number[][] = [];
+    const usedKeys = new Set<string>();
+
     for (let i = 0; i < 3; i++) {
-      const set = generateSet(hot, cold, mid, baseSeed + i * 1000);
+      const seed = baseSeed * (i + 1) + i * 123456;
+      const set = generateSet(hot, cold, mid, seed, usedKeys);
       if (set && set.length === 6) {
+        usedKeys.add(set.join(","));
         result.push(set);
       }
     }
